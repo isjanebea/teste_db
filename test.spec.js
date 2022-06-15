@@ -5,5 +5,11 @@
  */
 
 describe('example', () => {
-  
+  it('should ', () => {
+      const cenario = "oi"
+
+      const resultado = "oi"
+
+      expect(cenario).toEqual(resultado)
+  });
 });
