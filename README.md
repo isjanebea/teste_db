@@ -290,13 +290,13 @@ coach { // 'coach' nome da key 'chave' da schema
 - [ ] GET **"/pokedex/busca?abilities=[habilidade]"** Deverá ser capaz de buscar um pokemon por sua habilidade
 
 - [ ] POST   "**/treinador**" Deverá criar um treinador 
-- [ ] POST   "**/pokemon**"  Deverá criar um pokemon 
+- [ ] POST   "**/pokedex**"  Deverá criar um pokemon 
 
 - [ ] DELETE   "/treinadores/[ID]" Deverá deletar um treinador por id específico e retorna mensagem amigável
-- [ ] DELETE   "/pokemons/[ID]" Deverá deletar um pokemon por id específico e retorna mensagem amigável
+- [ ] DELETE   "/pokedex/[ID]" Deverá deletar um pokemon por id específico e retorna mensagem amigável
 
 - [ ] PATCH  "/treinadores/[ID]" Deverá alterar informação específica dentro de um titulo por id específico e retorna o título alterado
-- [ ] PATCH  "/pokemons/[ID]" Deverá alterar informação específica dentro de um estudio por id específico e retorna o título alterado
+- [ ] PATCH  "/pokedex/[ID]" Deverá alterar informação específica dentro de um estudio por id específico e retorna o título alterado
 
 
 ### Regras de negócio
