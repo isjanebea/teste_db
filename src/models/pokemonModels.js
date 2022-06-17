@@ -16,15 +16,25 @@ const pokedexSchema = new mongoose.Schema({
     required: true
   },
 
+  abilities: {
+    type: [String],
+    default: []
+  },
+
   description: {
     type: String,
   },
 
-  status: {
+  avaliable: {
     type: Boolean,
     default: true // não deveria ter hp e atk?
-  }
+  },
 
+  coach: {
+    ref: 'coach',
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 }, { timestamps: true })
 
 module.exports = mongoose.model('pokedex', pokedexSchema)

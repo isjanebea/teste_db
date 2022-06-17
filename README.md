@@ -92,17 +92,37 @@ Tudo no Mongoose começa com um Schema. Cada esquema é mapa para uma coleção 
 Exemplo photoshop x Filtro do Instagram
 
 #### `8. Conceito de Model (Schema)`
-Model ou Schema são moldes que descrevem quais campos serão aceitos no seu banco de dados, podemos também definir informações de tipo de dados e fazer "os relacionamentos".
+Nosso mongoose utiliza a `Schema` para pôr ordem na ' bagunça ', afinal como podemos salvar qualquer coisa, de qualquer jeito, seria uma loucura não?  Para isso precisamos de um schema( espelho ) de como será salvo nosso `document`.
+
+Além disso, nos permite fazer o relacionamento de dados entre os collections diferentes.
+
+exemplo de schema:
+
+```javascript
+const mongoose = require('mongoose');
+
+const PokemonSchema = monogoose.Schema({
+    name: String,
+    avaliable: Boolean,
+    birthdate: Date,
+    abilities: [String],
+    attributes: {
+      hp: Number,
+      attack: Number,
+      defense: Number,
+    }
+});
+
+```
 
 #### `9. Passos para conectar o MongoDb usando mongoose:`
 
-1 - Crio meu schema no model
-2 - Crio minha configuracao de conexao no database, passando informacoes padrão e a minha string de conexão
-3 - Ligar a conexão no meu server, importando meu arquivo database
+1 - Crio minha configuracao de conexao no database, passando informacoes padrão e a minha string de conexão
+2 - Crio meu schema no model
+3 - requiro no app e chamo a função de conexão
 
-#### `10. Extra: `
 
-`Dotenv`
+## [extra: 01] Dotenv - variaves de ambiente
 
 Essa dica com certeza dará mais maturidade aos seus códigos de backend.
 Afinal de contas dotenv é uma excelente ferramenta para gerenciar os dados sensíveis de desenvolvimento que não devem ser compartilhados como: chaves de API’s, informações do banco de dados, entre outras.
@@ -132,17 +152,76 @@ process.env.NOME_DA_CHAVE
 
 Você pode criar um .env.example e deixar apenas as chaves genéricas
 ```
+## [extra: 02] Classes | POO (orientação a objetos) Conceitos básicos
+Uma breve introdução sobre classes e objetos, para que possamos entender melhor o  nosso ORM.
+
+###  uso da palavra reservada `new`
+Quando possuímos uma classe, podemos utilizar a palavra reservada `new`  para instanciar um objeto, ou seja, construir um novo documento a partir da classe( nossa `Schema` ),  afinal, não queremos que um Pikachu, se transforme num Charmander.
+
+```javascript
+const pokemon = new Model({
+    name: 'Pikachu',
+    avaliable: true,
+    abilities: ['choque-do-trovao', 'esquivar'],
+    attributes: {
+      hp: 100,
+      attack: 55,
+      defense: 40,
+    }
+});
+
+```
+
+### Métodos
+Como mencionamos em aulas passadas, assim como o objeto, as classes possuiem métodos, que são funções que nos auxiliam a realizar **ações** como por exemplo: salvar um pokemon, ou um ataque especial como shock do trovao, no nosso dia-a-dia usamos o console`.log`, *.log("hello word")* é um método que nos permite imprimir no terminal uma mensagem de texto.
+
+#### Métodos relação com a nossa API
+
+| OPERAÇÃO | MONGODB | MOOGOSE | DESCRIÇÃO | HttpCode
+| ---------- | -------------- | ---------------- | ----------------- | ---- |
+| **C**REATE | **db**.insertOne() | new **MusicModel**() | cria um documento | 201 |
+| **R**EAD | **db**.find() |  **MusicModel**.find() | ler um documento | 200 |
+| **U**PDATE | **db**.updateOne() | **MusicModel**.updateOne() | atualiza um documento | 200 |
+| **D**ELETE | **db**.deleteOne() | **MusicModel**.deleteOne() | deleta um documento | 200 ou 204
+
+
+### Constructor
+Nosso `constructor` é responsável por inicializar a nossa classe, ele recebe os parametros para criar construir a instancia da classe, como por exemplo, nossa música, é assim que nossa Schema gera a música no formato que o banco espera, no caso do mongo, um BJSON.
+
+### Tipagem - Tipos primários
+Na programação, existem tipos primários, que são responsáveis por definir o tipo de informação ( dado ) que estamos trabalhando, por exemplo um número de celular `Number`, ou um email que é texto `String`, ou até mesmo se é verdadeiro(true) ou falso(false) que é um `Boolean`, além disso, temos o `Date` que representa uma data. 
+
+ - String -> representa *texto* -> `""`
+ - Number -> representa *número*  `0`
+ - Boolean -> representa `true` ou `false`
+ - Date -> representa uma data, por exemplo, 1970-01-13 -> `Date`
+
+```typescript
+    name: String,
+    avaliable: Boolean,
+    birthdate: Date,
+    abilities: [String],
+    attributes: {
+      hp: Number,
+      attack: Number,
+      defense: Number,
+    }
+```
 
 ## Sobre o Projeto
 
-O **FavMovies** é um sistema de gerenciamento de catálogos de filmes dos estudios Marvel, Ghibli e Pixar. 
+O **{Pokedex}** é um sistema de gerenciamento de pokemons e treinadores.
 
-Onde receberemos cadastros de títulos(filmes e séries) referenciando cada estúdio criador. 
+Onde receberemos cadastros de pokemons referenciando cada ao seu respectivo treinador. 
 
-```
-"Relacionamento" no MongoDB? Como é isso?
-- ref no model
-- populate do find (eager loading)
+```javascript
+ // "Relacionamento" no MongoDB? Como é isso?
+
+coach { // 'coach' nome da key 'chave' da schema
+  type: mongoose.Schema.Types.ObjectId, // id de referencia,
+  ref: 'coach' // colection de referencia
+}
+
 ```
 
 ## Tecnologias que vamos usar:
@@ -156,7 +235,7 @@ Onde receberemos cadastros de títulos(filmes e séries) referenciando cada est�
 | `nodemon` | Dependência que observa as atualizações realizadas nos documentos para rodar o servidor automaticamente|
 | `npm ou yarn` | Gerenciador de pacotes|
 | `MongoDb` | Banco de dado não relacional orietado a documentos|
-| `MongoDb Compass ou Robo 3T` | Interface gráfica para verificar se os dados foram persistidos|
+| `MongoDb Compass ou Mongo Atlas` | Interface gráfica para verificar se os dados foram persistidos|
  `Insomnia ou Postman` | Interface gráfica para realizar os testes|
 
 <br>
@@ -174,15 +253,15 @@ Onde receberemos cadastros de títulos(filmes e séries) referenciando cada est�
    |         |- 📄 moogoseConnect.js
    |
    |    |- 📁 controllers
-   |         |- 📄 treinadorController.js
+   |         |- 📄 coachController.js
    |         |- 📄 pokemonController.js
    |
    |    |- 📁 models
-   |         |- 📄 treinadorModel.js
+   |         |- 📄 coachModel.js
    |         |- 📄 pokemonModel.js
    |
    |    |- 📁 routes
-   |         |- 📄 treinadorRoutes.js 
+   |         |- 📄 coachRoutes.js 
    |         |- 📄 pokemonRoutes.js 
    |
    |
@@ -198,113 +277,169 @@ Onde receberemos cadastros de títulos(filmes e séries) referenciando cada est�
 <br>
 
 # Contrato da API
-Sim, eu torcia pela equipe Rocket
+ - Sim, eu torcia pela equipe Rocket
 
 ### Requisitos 
+- [ ] GET "**/treinadores**" Deverá retornar todos os treinadores cadastrados.
+- [ ] GET **"/treinador/[id]** Deverá retornar o treinador com o id informado.
+- [ ] GET **"/treinador/busca?nome=[coachName]"** Deverá ser capaz de buscar um treinador por nome
 
-- [ ]  **"/treinadores/ash"** Deverá retornar os dados do ash e todos os seus pokemons.
-- [ ]  **"/treinadores/james"** Deverá retornar os dados da misty e todos os seus pokemons.
-- [ ]  **"/treinadores/jessie"** Deverá retornar os dados do brock e todos os seus pokemons.
+- [ ] GET "**/pokedex**" Deverá retornar todos os pokemons cadastrados.
+- [ ] GET **"/pokedex/[id]** Deverá retornar o pokemon com o id informado e o seu treinador
+- [ ] GET **"/pokedex/coach/[id]"**  Deverá retornar o treinador com o id informado, com todos os seus pokemons
+- [ ] GET **"/pokedex/busca?abilities=[habilidade]"** Deverá ser capaz de buscar um pokemon por sua habilidade
 
-- [ ]  **"/pokemons"** Deverá retornar todos os pokemons cadastrados
-- [ ]  "**/treinadores**" Deverá retornar todos os treinadores cadastrados, com todos os seus pokemons
+- [ ] POST   "**/treinador**" Deverá criar um treinador 
+- [ ] POST   "**/pokemon**"  Deverá criar um pokemon 
 
-- [ ]  "**/treinador**" Deverá criar um treinador 
-- [ ]  "**/pokemon**"  Deverá criar um pokemon 
+- [ ] DELETE   "/treinadores/[ID]" Deverá deletar um treinador por id específico e retorna mensagem amigável
+- [ ] DELETE   "/pokemons/[ID]" Deverá deletar um pokemon por id específico e retorna mensagem amigável
 
-- [ ]  "/treinadores/[ID]" Deverá deletar um treinador por id específico e retorna mensagem amigável
-- [ ]  "/pokemons/[ID]" Deverá deletar um pokemon por id específico e retorna mensagem amigável
-
-- [ ]  "/treinadores/[ID]" Deverá alterar informação específica dentro de um titulo por id específico e retorna o título alterado
-- [ ]  "/pokemons/[ID]" Deverá alterar informação específica dentro de um estudio por id específico e retorna o título alterado
+- [ ] PATCH  "/treinadores/[ID]" Deverá alterar informação específica dentro de um titulo por id específico e retorna o título alterado
+- [ ] PATCH  "/pokemons/[ID]" Deverá alterar informação específica dentro de um estudio por id específico e retorna o título alterado
 
 
 ### Regras de negócio
 
-- [ ]  Não deverá ser possível criar pokemon com o mesmo nome
 - [ ]  Não deverá ser possível criar treinador com o mesmo nome
-- [ ]  Para criar um novo título, deverá vincular no momento da criação a um estudio já existente no sistema, utilizando o numero do id do estudio correspondente no corpo da requisição
+- [ ]  Para criar um novo pokemon, deverá vincular no momento da criação a um treinador já existente no sistema, utilizando o numero do id do treinador correspondente no corpo da requisição
 
 <br>
 <br>
 
-### Dados para Collection Estudios
+## Dados para Collection Treinador
 
-- id: autogerado e obrigatório
-- nome: texto e obrigatório
-- criadoEm: data gerada automaticamente e obrigatório
-
+- _id: autogerado e obrigatório
+- name: texto e obrigatório
+- age: numero e obrigatorio
+- team: texto e opcional
+- gender: texto, opcional e com default 'não informado'
+- region: texto e opcional
 
 ### API deve retornar seguinte JSON:
 
-```jsx
+```javascript
 [
-    {
-    "criadoEm": "2021-06-05T01:27:40.886Z",
-    "_id": "60bad38c8c299c285d2685e7",
-    "nome": "Marvel",
-    "__v": 0
-    },
-    {
-    "criadoEm": "2021-06-05T01:27:40.886Z",
-    "_id": "60bad33d8c299c285d2685e5",
-    "nome": "Ghibli",
-    "__v": 0
+  {
+    _id: new ObjectId("62ab7c861ff392ef188b10fe"),
+    name: 'Ash',
+    age: 10,
+    team: null,
+    gender: 'male',
+    region: 'Kanto',
+    createdAt: 2022-06-16T18:55:02.023Z,
+    updatedAt: 2022-06-16T18:55:02.023Z,
+    __v: 0
   },
   {
-    "criadoEm": "2021-06-05T01:27:40.886Z",
-    "_id": "60bad33d8c299c285d2685e5",
-    "nome": "Pixar",
-    "__v": 0
+    _id: new ObjectId("62ab7c861ff392ef188b1104"),
+    name: 'Jessie',
+    age: 25,
+    team: 'Rocket',
+    gender: 'female',
+    region: 'Kanto',
+    createdAt: 2022-06-16T18:55:02.090Z,
+    updatedAt: 2022-06-16T18:55:02.090Z,
+    __v: 0
   }
 ]
+
 ```
 <br>
 <br>
 
-### Dados para Collection Titulos
 
-- id: autogerado e obrigatório
-- nome: texto e obrigatório
-- genero: texto e obrigatório
-- descricao: texto e obrigatório
-- criadoEm: data gerada automaticamente e obrigatório
-- estudio: referencia do estudio cadastrado previamente obrigatório
+## Dados para Collection Pokemon
 
+- _id: autogerado e obrigatório
+- name: texto e obrigatório
+- type: texto e obrigatório
+- abilities: array de texto, opcional e com default []
+- description: texto e opcional
+- avaliable: bolean e opcional com o default true
 
 ### API deve retornar seguinte JSON:
 
-```jsx
+```javascript
 [
   {
-    "criadoEm": "2021-06-05T01:27:40.892Z",
-    "_id": "60bad3568c299c285d2685e6",
-    "nome": "Spirited Away",
-    "genero": "romance",
-    "descricao": "SPIRITED AWAY é uma fantasia maravilhosa sobre uma jovem garota, Chihiro, presa em um estranho mundo novo de espíritos. Quando seus pais passam por uma transformação misteriosa, ela deve invocar a coragem que ela nunca soube que tinha para se libertar e retornar sua família para o mundo exterior. Uma história inesquecível e cheia de criatividade, SPIRITED AWAY o levará em uma jornada além da sua imaginação.",
-    "estudio": {
-      "criadoEm": "2021-06-05T01:27:40.886Z",
-      "_id": "60bad33d8c299c285d2685e5",
-      "nome": "Ghibli",
-    }
+    _id: new ObjectId("62ab7c861ff392ef188b1100"),
+    name: 'Pikachu',
+    type: 'Eletric',
+    abilities: [ 'Static' ],
+    description: 'Pikachu that can generate powerful electricity have cheek sacs that are extra soft and super stretchy.',
+    avaliable: true,
+    coach: new ObjectId("62ab7c861ff392ef188b10fe"),
+    createdAt: 2022-06-16T18:55:02.076Z,
+    updatedAt: 2022-06-16T18:55:02.076Z,
+    __v: 0
+  },
+  {
+    _id: new ObjectId("62ab7c861ff392ef188b1102"),
+    name: 'Bulbasaur',
+    type: 'Eletric',
+    abilities: [ 'Overgrow' ],
+    description: 'There is a plant seed on its back right from the day this Pokémon is born. The seed slowly grows larger.',
+    avaliable: true,
+    coach: new ObjectId("62ab7c861ff392ef188b10fe"),
+    createdAt: 2022-06-16T18:55:02.084Z,
+    updatedAt: 2022-06-16T18:55:02.084Z,
+    __v: 0
+  },
+  {
+    _id: new ObjectId("62ab7c861ff392ef188b1106"),
+    name: 'Wobbuffet',
+    type: 'Psychic',
+    abilities: [ 'Shadow Tag' ],
+    description: 'It hates light and shock. If attacked, it inflates its body to pump up its counterstrike.',
+    avaliable: true,
+    coach: new ObjectId("62ab7c861ff392ef188b1104"),
+    createdAt: 2022-06-16T18:55:02.095Z,
+    updatedAt: 2022-06-16T18:55:02.095Z,
+    __v: 0
+  },
+  {
+    _id: new ObjectId("62ab7c861ff392ef188b1108"),
+    name: 'Ekans',
+    type: 'Poison',
+    abilities: [ 'Shed Skin', 'Intimidate' ],
+    description: 'There is a plant seed on its back right from the day this Pokémon is born. The seed slowly grows larger.',
+    avaliable: true,
+    coach: new ObjectId("62ab7c861ff392ef188b1104"),
+    createdAt: 2022-06-16T18:55:02.102Z,
+    updatedAt: 2022-06-16T18:55:02.102Z,
+    __v: 0
   }
 ]
 ```
 <br>
 <br>
 
-## Entregavel
 
-Crie seu repositório contendo:
- - um readme com os maiores aprendizados nesse projeto e copiando todas as informações sobre o projeto
- - cumprimento total do contrato (requisitos e regras de negócios) 
- - realizar testes no Postman e verificar se os dados estão persistindo com o mongoDB (ROBO 3T)
+##  🎓 Combinado da semana
+ - [PARA O LAR](./para_o_lar//instru%C3%A7%C3%B5es.md) < clique aqui
 
-Subir o repositório no classroom.
+## 📖 Referências
+- https://www.gartner.com/en/information-technology/glossary/object-data-model
+- https://medium.com/tkssharma/node-js-with-mongoose-odm-9697c09665df
+- https://developer.mozilla.org/pt-BR/docs/Learn/Server-side/Express_Nodejs/mongoose
+- https://docs.mongodb.com/
+- https://docs.mongodb.com/manual/crud/
+- https://docs.atlas.mongodb.com/tutorial/create-new-cluster/
+- https://studio3t.com/academy/topic/mongodb-vs-sql-concepts/
+- https://dzone.com/articles/sql-vs-nosql
+- https://mongoosejs.com/docs/index.html
 
-## Simara Conceição
-- [instagram](https://www.instagram.com/simara_conceicao)
-- [linkedin](https://www.linkedin.com/in/simaraconceicao/)
-- [github](https://github.com/simaraconceicao)
-- [spotify](https://open.spotify.com/show/59vCz4TY6tPHXW26qJknh3)
-- [quero ser dev](https://queroserdev.com)
+### 🎥 Videos de apoio
+
+- [Resumo Mongodb - Codigo Fonte TV](https://www.youtube.com/watch?v=4dTI1mVLX3I)
+- [nodeJs Express Mongo - Api rest full Turitorial](https://www.youtube.com/watch?v=K5QaTfE5ylk)
+- [O que é banco de dados? - Curso em Video](https://www.youtube.com/watch?v=Ofktsne-utM)
+
+## 👋🏾 Minhas redes sociais
+ - [LINKEDIN](https://www.linkedin.com/in/beatriz-ramerindo/)
+ - [GITHUB](https://github.com/isjanebia)
+ - [INSTAGRAN](https://www.instagram.com/isjanebea/)
+ - [site] [beatriz.rarmerindo.com.br](beatriz.ramerindo.com.br)
+ - [email] bea@ramerindo.com.br
+

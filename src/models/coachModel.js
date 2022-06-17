@@ -20,17 +20,13 @@ const coachSchema = new mongoose.Schema({
     type: String
   },
 
-  city:  {
-    type: String,
-    required: true
+  gender: {
+    type: String
   },
 
-  pokedex: {
-    ref: 'pokedex',
-    type: mongoose.Schema.Types.ObjectId,
-    required: true
+  region:  {
+    type: String
   }
-
 }, { timestamps: true })
 
 module.exports = mongoose.model('coach', coachSchema)
